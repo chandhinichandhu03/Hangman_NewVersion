@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Quest - Logic & Auth</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="animate-fade-in">
+    <div class="auth-container">
+        <div class="logo-section">
+            <h1>HANGMAN QUEST</h1>
+            <p>Master the words. Conquer the quest.</p>
+        </div>
+
+        <button id="theme-toggle" class="btn-secondary"
+            style="position: absolute; top: 20px; right: 20px; padding: 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5" />
+                <path
+                    d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+            </svg>
+        </button>
+
+        <div class="glass-panel auth-card" id="login-section">
+            <h2 style="margin-bottom: 24px; text-align: center;">Welcome Back</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-input" id="login-username" required placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-input" id="login-password" required placeholder="••••••••">
+                </div>
+                <div id="login-error"
+                    style="color: var(--danger); margin-bottom: 16px; font-size: 0.9rem; display: none;"></div>
+                <button type="submit" class="btn-primary" style="width: 100%;">
+                    <span>Sign In</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                        <polyline points="10 17 15 12 10 7" />
+                        <line x1="15" y1="12" x2="3" y2="12" />
+                    </svg>
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 24px; color: var(--text-muted);">
+                Don't have an account? <a href="#" id="show-signup" style="color: var(--primary-color);">Sign Up</a>
+            </p>
+        </div>
+
+        <div class="glass-panel auth-card" id="signup-section" style="display: none;">
+            <h2 style="margin-bottom: 24px; text-align: center;">Create Account</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-input" id="signup-username" required placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-input" id="signup-password" required
+                        placeholder="Choose a password">
+                </div>
+                <div id="signup-error"
+                    style="color: var(--danger); margin-bottom: 16px; font-size: 0.9rem; display: none;"></div>
+                <button type="submit" class="btn-primary" style="width: 100%;">
+                    <span>Create Account</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <line x1="20" y1="8" x2="20" y2="14" />
+                        <line x1="23" y1="11" x2="17" y2="11" />
+                    </svg>
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 24px; color: var(--text-muted);">
+                Already have an account? <a href="#" id="show-login" style="color: var(--primary-color);">Sign In</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

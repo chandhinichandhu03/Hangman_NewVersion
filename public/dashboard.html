@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Hangman Quest</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .difficulty-options {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .difficulty-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .difficulty-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header glass-panel" style="border-radius: 0; border-top: 0; border-left: 0; border-right: 0;">
+        <div class="logo-section" style="margin-bottom: 0;">
+            <h1 style="font-size: 1.5rem;">HANGMAN <span style="font-weight: 300;">QUEST</span></h1>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <span id="welcome-msg" style="color: var(--text-main); font-weight: 600;">Welcome, Captain</span>
+            <button id="logout-btn" class="btn-secondary" style="padding: 8px 16px;">Logout</button>
+            <button id="theme-toggle" class="btn-secondary" style="padding: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5" />
+                    <path
+                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="dashboard-grid animate-fade-in">
+        <!-- New Game Section -->
+        <div class="glass-panel stat-card" style="grid-column: span 2;">
+            <h2 style="margin-bottom: 20px;">Ready for a Challenge?</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div>
+                    <label style="color: var(--text-muted);">Select Category</label>
+                    <select id="game-category" class="form-input" style="margin-top: 8px;">
+                        <option value="programming">💻 Programming</option>
+                        <option value="movies">🎬 Movies</option>
+                        <option value="animals">🐾 Animals</option>
+                        <option value="countries">🌎 Countries</option>
+                        <option value="sports">🏆 Sports</option>
+                        <option value="science">🔬 Science</option>
+                        <option value="food">🍕 Food</option>
+                        <option value="space">🚀 Space</option>
+                        <option value="technology">📱 Technology</option>
+                        <option value="bikes">🏍️ Bikes</option>
+                        <option value="cars">🚗 Cars</option>
+                        <option value="god">🔱 God</option>
+                        <option value="mnc">🏢 MNC Company</option>
+                        <option value="english">🔤 English Words</option>
+                    </select>
+
+                    <label style="color: var(--text-muted); display: block; margin-top: 20px;">Select Difficulty</label>
+                    <div class="difficulty-options">
+                        <button class="difficulty-btn active" data-value="easy">Easy</button>
+                        <button class="difficulty-btn" data-value="medium">Medium</button>
+                        <button class="difficulty-btn" data-value="hard">Hard</button>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
+                    <a href="game.html" id="play-btn" class="btn-primary"
+                        style="width: 100%; height: 60px; font-size: 1.2rem;">
+                        <span>START QUEST</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div class="glass-panel stat-card">
+            <h3 style="margin-bottom: 16px;">Top Hunters</h3>
+            <div id="leaderboard-list">
+                <!-- Leaderboard data goes here -->
+            </div>
+        </div>
+
+        <div class="glass-panel stat-card" style="position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0;">My Recent Quests</h3>
+                <button id="clear-history-btn" class="btn-secondary"
+                    style="padding: 6px 14px; font-size: 0.85rem; border: 1.5px solid var(--danger); color: var(--danger); background: rgba(239, 68, 68, 0.05); font-weight: 700; border-radius: 8px; transition: all 0.3s; cursor: pointer;">
+                    CLEAR ALL
+                </button>
+            </div>
+            <div id="history-list">
+                <!-- User history goes here -->
+            </div>
+        </div>
+    </main>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
