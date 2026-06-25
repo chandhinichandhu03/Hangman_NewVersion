@@ -1,47 +1,76 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
 
 :root {
-    --primary-color: #6366f1;
-    --primary-hover: #4f46e5;
-    --secondary-color: #ec4899;
-    --bg-dark: #0f172a;
-    --bg-lighter: #1e293b;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --success: #22c55e;
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --glass: rgba(30, 41, 59, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    --bg-dark: #FAFBFC;
+    --bg-lighter: #FFFFFF;
+    --primary-color: #4F9CF9;
+    --primary-hover: #3580DC;
+    --secondary-color: #6EE7B7;
+    --secondary-hover: #4ADE80;
+    --accent-color: #A78BFA;
+    --success: #22C55E;
+    --danger: #EF4444;
+    --warning: #FB923C;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+    --glass: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(79, 156, 249, 0.15);
+    --shadow-lg: 0 10px 30px -5px rgba(79, 156, 249, 0.08), 0 8px 15px -6px rgba(0, 0, 0, 0.05);
+    --font-heading: 'Outfit', sans-serif;
 }
 
-body.light-mode {
-    --bg-dark: #f8fafc;
-    --bg-lighter: #ffffff;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --glass: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(0, 0, 0, 0.15);
-    background-image:
-        radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
+body.dark-mode {
+    --bg-dark: #0B0F19;
+    --bg-lighter: #161D30;
+    --primary-color: #4F9CF9;
+    --primary-hover: #60A5FA;
+    --secondary-color: #6EE7B7;
+    --secondary-hover: #34D399;
+    --accent-color: #A78BFA;
+    --success: #22C55E;
+    --danger: #EF4444;
+    --warning: #FB923C;
+    --text-main: #F1F5F9;
+    --text-muted: #94A3B8;
+    --glass: rgba(22, 29, 48, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
 }
 
-body.light-mode .difficulty-btn {
-    border: 1px solid #cbd5e1;
-    background: #f1f5f9;
-    color: #0f172a;
+body.colorblind-mode {
+    --bg-dark: #FFFFFF;
+    --bg-lighter: #F5F5F5;
+    --primary-color: #0072B2;
+    --primary-hover: #005A8D;
+    --secondary-color: #E69F00;
+    --secondary-hover: #D55E00;
+    --accent-color: #56B4E9;
+    --success: #56B4E9;
+    --danger: #D55E00;
+    --warning: #F0E442;
+    --text-main: #000000;
+    --text-muted: #4A4A4A;
+    --glass: rgba(255, 255, 255, 0.95);
+    --glass-border: #000000;
+    --shadow-lg: none;
 }
 
-body.light-mode .difficulty-btn:hover {
-    background: #e2e8f0;
-}
-
-body.light-mode .difficulty-btn.active {
-    background: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
+body.kids-mode {
+    --bg-dark: #FFFBEB;
+    --bg-lighter: #FEF3C7;
+    --primary-color: #FB7185;
+    --primary-hover: #F43F5E;
+    --secondary-color: #60A5FA;
+    --secondary-hover: #3B82F6;
+    --accent-color: #FBBF24;
+    --success: #34D399;
+    --danger: #F87171;
+    --warning: #F59E0B;
+    --text-main: #78350F;
+    --text-muted: #B45309;
+    --glass: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(251, 113, 133, 0.3);
+    --shadow-lg: 0 10px 20px rgba(251, 113, 133, 0.1);
 }
 
 * {
@@ -49,18 +78,35 @@ body.light-mode .difficulty-btn.active {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Outfit', sans-serif;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 body {
     background-color: var(--bg-dark);
     background-image:
-        radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+        radial-gradient(circle at 20% 30%, rgba(79, 156, 249, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(167, 139, 250, 0.08) 0%, transparent 40%);
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+}
+
+body.dark-mode {
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(79, 156, 249, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(167, 139, 250, 0.15) 0%, transparent 40%);
+}
+
+body.kids-mode {
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(251, 113, 133, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(251, 191, 36, 0.1) 0%, transparent 40%);
+}
+
+body.colorblind-mode {
+    background-image: none;
 }
 
 /* Glassmorphism Components */
@@ -319,7 +365,7 @@ body {
 .logo-section h1 {
     font-size: 2.8rem;
     font-weight: 800;
-    background: linear-gradient(to right, #6366f1, #ec4899);
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -331,10 +377,14 @@ body {
     padding: 15px 40px;
     background: var(--glass);
     backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border-bottom: 2px solid var(--glass-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .dashboard-grid {
@@ -344,6 +394,221 @@ body {
     padding: 40px;
     max-width: 1300px;
     margin: 0 auto;
+    width: 100%;
+}
+
+/* Dashboard Navigation Tabs */
+.dashboard-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px 40px 0;
+    max-width: 1300px;
+    margin: 0 auto;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tab-btn {
+    background: var(--bg-lighter);
+    color: var(--text-muted);
+    border: 1px solid var(--glass-border);
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-btn:hover {
+    color: var(--text-main);
+    background: var(--glass-border);
+    transform: translateY(-2px);
+}
+
+.tab-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(79, 156, 249, 0.25);
+}
+
+.tab-content {
+    display: none;
+    width: 100%;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* XP Progress Bar */
+.xp-container {
+    background: var(--bg-dark);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    height: 24px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.xp-bar {
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    height: 100%;
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.xp-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+/* Achievements Badges Grid */
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.badge-card {
+    background: var(--bg-dark);
+    border: 1.5px dashed var(--glass-border);
+    border-radius: 16px;
+    padding: 15px 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge-card.unlocked {
+    background: var(--bg-lighter);
+    border-style: solid;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(79, 156, 249, 0.1);
+}
+
+.badge-icon {
+    font-size: 2.2rem;
+    filter: grayscale(1) opacity(0.4);
+    transition: all 0.3s ease;
+}
+
+.badge-card.unlocked .badge-icon {
+    filter: grayscale(0) opacity(1);
+    animation: float 3s ease-in-out infinite;
+}
+
+.badge-name {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--text-muted);
+}
+
+.badge-card.unlocked .badge-name {
+    color: var(--text-main);
+}
+
+.badge-desc {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+/* Vocabulary Discovery Center */
+.discovery-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 30px;
+    padding: 20px;
+}
+
+.word-list-box {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.vocab-item {
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vocab-item:hover {
+    background: var(--glass-border);
+}
+
+.vocab-item.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Onboarding Tutorial Overlay */
+.onboarding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    z-index: 9999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.onboarding-card {
+    background: var(--bg-lighter);
+    border: 2px solid var(--primary-color);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    animation: fadeIn 0.4s;
+    color: var(--text-main);
+}
+
+/* Dyslexia font accessibility overrides */
+body.dyslexia-font * {
+    font-family: 'Comic Sans MS', 'DyslexicFont', sans-serif !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.1em !important;
+}
+
+/* Accessibility Highlight Outline */
+.key-highlight {
+    outline: 3px solid var(--accent-color);
+    animation: pulseOutline 1s infinite alternate;
+}
+
+@keyframes pulseOutline {
+    from { outline-offset: 0px; }
+    to { outline-offset: 4px; }
 }
 
 @media (max-width: 768px) {
@@ -355,5 +620,9 @@ body {
 
     .header {
         padding: 15px 20px;
+    }
+    
+    .discovery-container {
+        grid-template-columns: 1fr;
     }
 }

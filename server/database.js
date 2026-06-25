@@ -33,7 +33,68 @@ function createTables() {
             FOREIGN KEY (user_id) REFERENCES users(id)
         )`);
 
-        console.log('Tables created or already exist.');
+        // Custom words table
+        db.run(`CREATE TABLE IF NOT EXISTS custom_words (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            word TEXT NOT NULL COLLATE NOCASE,
+            category TEXT,
+            hint TEXT,
+            meaning TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            UNIQUE(user_id, word)
+        )`);
+
+        // User achievements table
+        db.run(`CREATE TABLE IF NOT EXISTS user_achievements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            badge_id TEXT NOT NULL,
+            unlocked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            UNIQUE(user_id, badge_id)
+        )`);
+
+        // User vocabulary builder log table
+        db.run(`CREATE TABLE IF NOT EXISTS user_vocabulary (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            word TEXT NOT NULL COLLATE NOCASE,
+            category TEXT,
+            meaning TEXT,
+            learned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            UNIQUE(user_id, word)
+        )`);
+
+        // Add progression columns to users table if they do not exist
+        db.all(`PRAGMA table_info(users)`, (err, rows) => {
+            if (err) {
+                console.error("Error fetching users table info:", err);
+                return;
+            }
+            const columns = rows.map(r => r.name);
+            const checkAndAdd = (colName, typeAndDefault) => {
+                if (!columns.includes(colName)) {
+                    db.run(`ALTER TABLE users ADD COLUMN ${colName} ${typeAndDefault}`, (err) => {
+                        if (err) {
+                            console.error(`Error adding column ${colName}:`, err.message);
+                        } else {
+                            console.log(`Added column ${colName} to users table.`);
+                        }
+                    });
+                }
+            };
+            checkAndAdd('xp', 'INTEGER DEFAULT 0');
+            checkAndAdd('level', 'INTEGER DEFAULT 1');
+            checkAndAdd('streak', 'INTEGER DEFAULT 0');
+            checkAndAdd('longest_streak', 'INTEGER DEFAULT 0');
+            checkAndAdd('last_login', 'TEXT');
+            checkAndAdd('unlocked_themes', "TEXT DEFAULT 'light,dark,colorblind'");
+        });
+
+        console.log('Tables created or verified.');
     });
 }
 

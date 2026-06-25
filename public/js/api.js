@@ -50,6 +50,35 @@ const api = {
         getHistory: () => api.fetch('/scores/history'),
         getLeaderboard: () => api.fetch('/scores/leaderboard'),
         clearHistory: () => api.fetch('/scores/clear', { method: 'DELETE' })
+    },
+
+    gameplay: {
+        getProfile: () => api.fetch('/gameplay/profile'),
+        updateProgress: (progressData) => api.fetch('/gameplay/progress', {
+            method: 'POST',
+            body: JSON.stringify(progressData)
+        }),
+        dailyCheckin: () => api.fetch('/gameplay/daily-checkin', {
+            method: 'POST'
+        }),
+        getCustomWords: () => api.fetch('/gameplay/custom-words'),
+        addCustomWord: (wordData) => api.fetch('/gameplay/custom-words', {
+            method: 'POST',
+            body: JSON.stringify(wordData)
+        }),
+        deleteCustomWord: (id) => api.fetch(`/gameplay/custom-words/${id}`, {
+            method: 'DELETE'
+        }),
+        getAchievements: () => api.fetch('/gameplay/achievements'),
+        unlockAchievement: (badgeId) => api.fetch('/gameplay/achievements', {
+            method: 'POST',
+            body: JSON.stringify({ badgeId })
+        }),
+        getVocabulary: () => api.fetch('/gameplay/vocabulary'),
+        addVocabularyWord: (wordData) => api.fetch('/gameplay/vocabulary', {
+            method: 'POST',
+            body: JSON.stringify(wordData)
+        })
     }
 };
 

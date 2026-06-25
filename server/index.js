@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const scoreRoutes = require('./routes/scores');
+const gameplayRoutes = require('./routes/gameplay');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/scores', scoreRoutes);
+app.use('/api/gameplay', gameplayRoutes);
 
 // Static files
 app.use(express.static(path.join(__dirname, '../public')));

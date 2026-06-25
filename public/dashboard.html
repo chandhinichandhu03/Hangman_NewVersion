@@ -7,113 +7,567 @@
     <title>Dashboard - Hangman Quest</title>
     <link rel="stylesheet" href="css/styles.css">
     <style>
-        .difficulty-options {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .difficulty-btn {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            background: transparent;
-            color: white;
+        /* Embedded dashboard styling helpers */
+        .mode-card {
+            background: var(--bg-dark);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            text-align: center;
         }
 
-        .difficulty-btn.active {
-            background: var(--primary-color);
+        .mode-card:hover {
             border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mode-card.active {
+            background: rgba(79, 156, 249, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .mode-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .mode-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .stat-grid-inner {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-box-inner {
+            background: var(--bg-dark);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-val-inner {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .stat-lbl-inner {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Simple CSS Bar Chart */
+        .bar-chart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .bar-chart-row {
+            display: grid;
+            grid-template-columns: 100px 1fr 50px;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bar-chart-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            color: var(--text-main);
+        }
+
+        .bar-chart-track {
+            background: var(--bg-dark);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .bar-chart-fill {
+            background: var(--primary-color);
+            height: 100%;
+            border-radius: 6px;
+            width: 0%;
+            transition: width 0.8s ease;
+        }
+
+        .bar-chart-val {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-align: right;
+        }
+
+        /* Custom Word Item */
+        .custom-word-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-dark);
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 8px;
         }
     </style>
 </head>
 
 <body>
+    <!-- HEADER -->
     <header class="header glass-panel" style="border-radius: 0; border-top: 0; border-left: 0; border-right: 0;">
         <div class="logo-section" style="margin-bottom: 0;">
             <h1 style="font-size: 1.5rem;">HANGMAN <span style="font-weight: 300;">QUEST</span></h1>
         </div>
         <div style="display: flex; align-items: center; gap: 20px;">
+            <div id="user-level-badge" style="background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.85rem;">
+                LEVEL <span id="header-level">1</span>
+            </div>
             <span id="welcome-msg" style="color: var(--text-main); font-weight: 600;">Welcome, Captain</span>
-            <button id="logout-btn" class="btn-secondary" style="padding: 8px 16px;">Logout</button>
-            <button id="theme-toggle" class="btn-secondary" style="padding: 8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="5" />
-                    <path
-                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                </svg>
-            </button>
+            <button id="logout-btn" class="btn-secondary" style="padding: 6px 14px; font-size: 0.9rem;">Logout</button>
         </div>
     </header>
 
-    <main class="dashboard-grid animate-fade-in">
-        <!-- New Game Section -->
-        <div class="glass-panel stat-card" style="grid-column: span 2;">
-            <h2 style="margin-bottom: 20px;">Ready for a Challenge?</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                <div>
-                    <label style="color: var(--text-muted);">Select Category</label>
-                    <select id="game-category" class="form-input" style="margin-top: 8px;">
-                        <option value="programming">💻 Programming</option>
-                        <option value="movies">🎬 Movies</option>
-                        <option value="animals">🐾 Animals</option>
-                        <option value="countries">🌎 Countries</option>
-                        <option value="sports">🏆 Sports</option>
-                        <option value="science">🔬 Science</option>
-                        <option value="food">🍕 Food</option>
-                        <option value="space">🚀 Space</option>
-                        <option value="technology">📱 Technology</option>
-                        <option value="bikes">🏍️ Bikes</option>
-                        <option value="cars">🚗 Cars</option>
-                        <option value="god">🔱 God</option>
-                        <option value="mnc">🏢 MNC Company</option>
-                        <option value="english">🔤 English Words</option>
-                    </select>
+    <!-- NAVIGATION TABS -->
+    <div class="dashboard-tabs">
+        <button class="tab-btn active" data-tab="play">🎮 Play Game</button>
+        <button class="tab-btn" data-tab="stats">📊 Statistics</button>
+        <button class="tab-btn" data-tab="showcase">🏆 Achievements</button>
+        <button class="tab-btn" data-tab="discovery">📖 Discovery Center</button>
+        <button class="tab-btn" data-tab="custom">✏️ Custom Words</button>
+        <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
+    </div>
 
-                    <label style="color: var(--text-muted); display: block; margin-top: 20px;">Select Difficulty</label>
-                    <div class="difficulty-options">
-                        <button class="difficulty-btn active" data-value="easy">Easy</button>
-                        <button class="difficulty-btn" data-value="medium">Medium</button>
-                        <button class="difficulty-btn" data-value="hard">Hard</button>
+    <!-- MAIN BODY -->
+    <main class="dashboard-grid animate-fade-in" style="padding-top: 20px;">
+        
+        <!-- ================= TAB: PLAY GAME ================= -->
+        <div id="tab-play" class="tab-content active" style="grid-column: span 3;">
+            <div style="display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 30px;">
+                <!-- Setup Card -->
+                <div class="glass-panel stat-card" style="padding: 30px;">
+                    <h2 style="margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">Select Your Quest Settings</h2>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                        <div>
+                            <label style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 8px;">Category</label>
+                            <select id="game-category" class="form-input">
+                                <option value="programming">💻 Programming</option>
+                                <option value="movies">🎬 Movies</option>
+                                <option value="animals">🐾 Animals</option>
+                                <option value="countries">🌎 Countries</option>
+                                <option value="sports">🏆 Sports</option>
+                                <option value="science">🔬 Science</option>
+                                <option value="history">📜 History</option>
+                                <option value="custom">✏️ Custom Collection</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 8px;">Difficulty</label>
+                            <div class="difficulty-options" style="display: flex; gap: 8px; margin-top: 0;">
+                                <button class="difficulty-btn active" data-value="easy">Easy</button>
+                                <button class="difficulty-btn" data-value="medium">Medium</button>
+                                <button class="difficulty-btn" data-value="hard">Hard</button>
+                                <button class="difficulty-btn" data-value="expert">Expert</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
-                    <a href="game.html" id="play-btn" class="btn-primary"
-                        style="width: 100%; height: 60px; font-size: 1.2rem;">
+
+                    <label style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 12px;">Choose Game Mode</label>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px;">
+                        <div class="mode-card active" data-mode="classic">
+                            <div class="mode-title">Classic</div>
+                            <div class="mode-desc">Standard rules, guess the word with 6 attempts.</div>
+                        </div>
+                        <div class="mode-card" data-mode="timed">
+                            <div class="mode-title">⏳ Timed Challenge</div>
+                            <div class="mode-desc">60 seconds total. Solve words quickly to earn extra time!</div>
+                        </div>
+                        <div class="mode-card" data-mode="survival">
+                            <div class="mode-title">❤️ Survival</div>
+                            <div class="mode-desc">Carry limited lives (8 total) across multiple rounds.</div>
+                        </div>
+                        <div class="mode-card" data-mode="endless">
+                            <div class="mode-title">🔁 Endless</div>
+                            <div class="mode-desc">Rounds increase in difficulty, lives do not fully reset.</div>
+                        </div>
+                        <div class="mode-card" data-mode="multiplayer">
+                            <div class="mode-title">👥 Pass & Play</div>
+                            <div class="mode-desc">Local 2-Player mode. Create a custom word for your friend!</div>
+                        </div>
+                        <div class="mode-card" data-mode="daily">
+                            <div class="mode-title">📅 Daily Challenge</div>
+                            <div class="mode-desc">A unique, daily generated word. Play once for bonus XP.</div>
+                        </div>
+                    </div>
+
+                    <button id="start-quest-btn" class="btn-primary" style="width: 100%; height: 55px; font-size: 1.15rem;">
                         <span>START QUEST</span>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
-                    </a>
+                    </button>
+                </div>
+
+                <!-- Leaderboard & Recent Quests Quick view -->
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="glass-panel stat-card" style="flex: 1;">
+                        <h3 style="margin-bottom: 12px;">Top Quest Hunters</h3>
+                        <div id="leaderboard-list">
+                            <!-- Leaderboard list -->
+                        </div>
+                    </div>
+                    <div class="glass-panel stat-card" style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="margin: 0;">Recent Quests</h3>
+                            <button id="clear-history-btn" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; border-color: var(--danger); color: var(--danger);">Clear</button>
+                        </div>
+                        <div id="history-list" style="max-height: 180px; overflow-y: auto;">
+                            <!-- History list -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Leaderboard Section -->
-        <div class="glass-panel stat-card">
-            <h3 style="margin-bottom: 16px;">Top Hunters</h3>
-            <div id="leaderboard-list">
-                <!-- Leaderboard data goes here -->
+        <!-- ================= TAB: STATISTICS ================= -->
+        <div id="tab-stats" class="tab-content" style="grid-column: span 3;">
+            <div class="glass-panel stat-card" style="padding: 30px; margin-bottom: 30px;">
+                <h2>My Historical Stats Dashboard</h2>
+                <div class="stat-grid-inner">
+                    <div class="stat-box-inner">
+                        <div class="stat-val-inner" id="stats-played">0</div>
+                        <div class="stat-lbl-inner">Played</div>
+                    </div>
+                    <div class="stat-box-inner">
+                        <div class="stat-val-inner" id="stats-winratio">0%</div>
+                        <div class="stat-lbl-inner">Win Ratio</div>
+                    </div>
+                    <div class="stat-box-inner">
+                        <div class="stat-val-inner" id="stats-highscore">0</div>
+                        <div class="stat-lbl-inner">High Score</div>
+                    </div>
+                    <div class="stat-box-inner">
+                        <div class="stat-val-inner" id="stats-streak">0</div>
+                        <div class="stat-lbl-inner">Current Streak</div>
+                    </div>
+                    <div class="stat-box-inner">
+                        <div class="stat-val-inner" id="stats-longeststreak">0</div>
+                        <div class="stat-lbl-inner">Max Streak</div>
+                    </div>
+                    <div class="stat-box-inner">
+                        <div class="stat-val-inner" id="stats-vocabcount">0</div>
+                        <div class="stat-lbl-inner">Vocabulary Size</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div class="glass-panel stat-card" style="padding: 25px;">
+                    <h3>Win Distribution by Category</h3>
+                    <div class="bar-chart-container" id="category-chart">
+                        <!-- Bars dynamically loaded -->
+                    </div>
+                </div>
+                <div class="glass-panel stat-card" style="padding: 25px;">
+                    <h3>Win Ratio Analytics</h3>
+                    <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px;">
+                            <span>Wins</span>
+                            <span id="stats-wins" style="font-weight: 800; color: var(--success);">0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px;">
+                            <span>Losses</span>
+                            <span id="stats-losses" style="font-weight: 800; color: var(--danger);">0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px;">
+                            <span>Quits</span>
+                            <span id="stats-quits" style="font-weight: 800; color: var(--warning);">0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-bottom: 8px;">
+                            <span>Rank Class</span>
+                            <span id="stats-rank" style="font-weight: 800; color: var(--primary-color);">NOVICE</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="glass-panel stat-card" style="position: relative;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin: 0;">My Recent Quests</h3>
-                <button id="clear-history-btn" class="btn-secondary"
-                    style="padding: 6px 14px; font-size: 0.85rem; border: 1.5px solid var(--danger); color: var(--danger); background: rgba(239, 68, 68, 0.05); font-weight: 700; border-radius: 8px; transition: all 0.3s; cursor: pointer;">
-                    CLEAR ALL
-                </button>
-            </div>
-            <div id="history-list">
-                <!-- User history goes here -->
+        <!-- ================= TAB: ACHIEVEMENTS ================= -->
+        <div id="tab-showcase" class="tab-content" style="grid-column: span 3;">
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+                <!-- Profile details -->
+                <div class="glass-panel stat-card" style="padding: 30px; text-align: center;">
+                    <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; margin: 0 auto 20px;">
+                        👨‍🎓
+                    </div>
+                    <h2 id="showcase-username">Player Profile</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Level <span id="showcase-level">1</span> Scholar</p>
+                    
+                    <div style="text-align: left; margin-bottom: 10px;">
+                        <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">EXP PROGRESS</span>
+                        <div class="xp-container">
+                            <div id="showcase-xp-bar" class="xp-bar" style="width: 30%;"></div>
+                            <span id="showcase-xp-text" class="xp-text">30 / 100 XP</span>
+                        </div>
+                    </div>
+
+                    <!-- Daily rewards check-in panel -->
+                    <div style="margin-top: 30px; border-top: 1px solid var(--glass-border); padding-top: 20px;">
+                        <h4>Daily Streak Rewards</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Claim daily bonus XP to level up faster!</p>
+                        <button id="daily-checkin-btn" class="btn-primary" style="width: 100%;">Claim Daily Bonus</button>
+                        <p id="checkin-msg" style="font-size: 0.8rem; color: var(--success); margin-top: 8px; display: none;"></p>
+                    </div>
+                </div>
+
+                <!-- Badges showcase -->
+                <div class="glass-panel stat-card" style="padding: 30px;">
+                    <h3>Achievement Showcase Cabinet</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Unlock achievement badges by hitting gameplay milestones!</p>
+                    
+                    <div class="badges-grid">
+                        <div class="badge-card" id="badge-first_win">
+                            <div class="badge-icon">🐣</div>
+                            <div class="badge-name">First Quest</div>
+                            <div class="badge-desc">Win a single game round.</div>
+                        </div>
+                        <div class="badge-card" id="badge-streak_3">
+                            <div class="badge-icon">🔥</div>
+                            <div class="badge-name">Fire Streak</div>
+                            <div class="badge-desc">Maintain a 3-game win streak.</div>
+                        </div>
+                        <div class="badge-card" id="badge-streak_5">
+                            <div class="badge-icon">☄️</div>
+                            <div class="badge-name">Super Streak</div>
+                            <div class="badge-desc">Maintain a 5-game win streak.</div>
+                        </div>
+                        <div class="badge-card" id="badge-expert_solve">
+                            <div class="badge-icon">🎓</div>
+                            <div class="badge-name">Expert Mind</div>
+                            <div class="badge-desc">Solve an Expert difficulty word.</div>
+                        </div>
+                        <div class="badge-card" id="badge-vocabulary_10">
+                            <div class="badge-icon">📚</div>
+                            <div class="badge-name">Linguist</div>
+                            <div class="badge-desc">Log 10 words to vocabulary builder.</div>
+                        </div>
+                        <div class="badge-card" id="badge-level_5">
+                            <div class="badge-icon">👑</div>
+                            <div class="badge-name">Grandmaster</div>
+                            <div class="badge-desc">Reach Player Level 5.</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- ================= TAB: DISCOVERY CENTER ================= -->
+        <div id="tab-discovery" class="tab-content" style="grid-column: span 3;">
+            <div class="glass-panel stat-card" style="padding: 30px;">
+                <h2>Interactive Word Discovery Center</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Study all words unlocked from your gameplay. View definitions, synonyms, origin, facts, and listen to pronunciation.</p>
+                
+                <div class="discovery-container">
+                    <!-- Word list Column -->
+                    <div>
+                        <h4 style="margin-bottom: 10px;">My Unlocked Words</h4>
+                        <div class="word-list-box" id="discovery-word-list">
+                            <!-- Populated with vocabulary list -->
+                        </div>
+                    </div>
+                    <!-- Detailed explanation Column -->
+                    <div style="border-left: 1px solid var(--glass-border); padding-left: 30px;">
+                        <div id="discovery-empty-view">
+                            <p style="color: var(--text-muted); text-align: center; margin-top: 100px;">Select a word from the list to display educational facts and metadata.</p>
+                        </div>
+                        <div id="discovery-details-view" style="display: none;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                                <div>
+                                    <h1 id="discovery-word" style="text-transform: uppercase; font-size: 2.5rem; color: var(--primary-color);">WORD</h1>
+                                    <span id="discovery-pronunciation" style="font-family: monospace; color: var(--accent-color); font-size: 1.1rem;">/pronunciation/</span>
+                                </div>
+                                <span id="discovery-category-badge" style="background: var(--bg-dark); border: 1px solid var(--glass-border); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">Category</span>
+                            </div>
+
+                            <button id="pronounce-btn" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px;">
+                                🔊 Read Aloud
+                            </button>
+
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div>
+                                    <h4 style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Meaning / Definition</h4>
+                                    <p id="discovery-meaning" style="font-size: 1.05rem;">Word definition goes here.</p>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                    <div>
+                                        <h4 style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Synonyms</h4>
+                                        <p id="discovery-synonyms">Synonyms</p>
+                                    </div>
+                                    <div>
+                                        <h4 style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Antonyms</h4>
+                                        <p id="discovery-antonyms">Antonyms</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Word Origin & Etymology</h4>
+                                    <p id="discovery-origin" style="font-style: italic;">Origin information.</p>
+                                </div>
+                                <div style="background: var(--bg-dark); padding: 15px; border-radius: 12px; border-left: 4px solid var(--primary-color);">
+                                    <h4 style="color: var(--primary-color); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 4px;">Did You Know? (Educational Fact)</h4>
+                                    <p id="discovery-fact" style="font-size: 0.95rem;">Fun educational fact about this word.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB: CUSTOM WORDS ================= -->
+        <div id="tab-custom" class="tab-content" style="grid-column: span 3;">
+            <div style="display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 30px;">
+                <!-- Add Custom Word Form -->
+                <div class="glass-panel stat-card" style="padding: 30px;">
+                    <h3>Add Custom Word</h3>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 20px;">Add your own words to play in custom game rounds!</p>
+                    
+                    <form id="custom-word-form">
+                        <div class="form-group">
+                            <label>Word</label>
+                            <input type="text" id="custom-word" class="form-input" required placeholder="e.g. SERENDIPITY" pattern="[A-Za-z ]+" title="Letters and spaces only">
+                        </div>
+                        <div class="form-group">
+                            <label>Category Category</label>
+                            <input type="text" id="custom-category" class="form-input" placeholder="e.g. Vocabulary">
+                        </div>
+                        <div class="form-group">
+                            <label>Simple Hint</label>
+                            <input type="text" id="custom-hint" class="form-input" placeholder="e.g. A happy accident">
+                        </div>
+                        <div class="form-group">
+                            <label>Meaning / Definition</label>
+                            <textarea id="custom-meaning" class="form-input" style="height: 80px;" placeholder="The occurrence of events by chance in a happy way"></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%;">Add to Collection</button>
+                    </form>
+                </div>
+
+                <!-- Custom Word List -->
+                <div class="glass-panel stat-card" style="padding: 30px;">
+                    <h3>My Custom Collection</h3>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 20px;">These words will be added to the playable rotation when choosing the "Custom Collection" category.</p>
+                    
+                    <div id="custom-words-list" style="max-height: 400px; overflow-y: auto;">
+                        <!-- List loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB: SETTINGS ================= -->
+        <div id="tab-settings" class="tab-content" style="grid-column: span 3;">
+            <div class="glass-panel stat-card" style="padding: 30px;">
+                <h2>Platform Settings & Customization</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 30px;">Customize visual styles, accessibility, and gameplay controls.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                    <!-- Theme & Design section -->
+                    <div>
+                        <h4 style="margin-bottom: 15px;">Visual Themes</h4>
+                        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="radio" name="setting-theme" value="light" checked>
+                                ☀️ Premium Light Theme (Default)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="radio" name="setting-theme" value="dark">
+                                🌙 Sleek Space Dark Mode
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="radio" name="setting-theme" value="colorblind">
+                                👁️ Color-Blind / High Contrast Mode
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="radio" name="setting-theme" value="kids">
+                                🎨 Family Playful Kids Mode
+                            </label>
+                        </div>
+
+                        <h4 style="margin-bottom: 15px;">Sound Controls</h4>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                                <span>Enable Sound Effects</span>
+                                <input type="checkbox" id="setting-sound" checked>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Accessibility Controls -->
+                    <div style="border-left: 1px solid var(--glass-border); padding-left: 40px;">
+                        <h4 style="margin-bottom: 15px;">Accessibility Enhancements</h4>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                                <div>
+                                    <span style="display: block; font-weight: 600;">Dyslexia-Friendly Font</span>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Uses Comic Sans style legibility helpers.</span>
+                                </div>
+                                <input type="checkbox" id="setting-dyslexia">
+                            </label>
+                            
+                            <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                                <div>
+                                    <span style="display: block; font-weight: 600;">Keyboard Assistance Highlights</span>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Pulse recommend letters in game mode.</span>
+                                </div>
+                                <input type="checkbox" id="setting-assist" checked>
+                            </label>
+
+                            <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                                <div>
+                                    <span style="display: block; font-weight: 600;">Onboarding Tutorial</span>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Reset and run the step-by-step walkthrough.</span>
+                                </div>
+                                <button type="button" id="reset-tutorial-btn" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">Run Guide</button>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
+
+    <!-- ONBOARDING TUTORIAL MODAL -->
+    <div class="onboarding-overlay" id="tutorial-overlay">
+        <div class="onboarding-card">
+            <h2 id="tutorial-title" style="margin-bottom: 15px; color: var(--primary-color);">Welcome to Hangman Quest!</h2>
+            <p id="tutorial-content" style="margin-bottom: 25px; min-height: 80px; font-size: 0.95rem; line-height: 1.5; color: var(--text-muted);">
+                Welcome, scholar! Let's take a quick 3-step tour of the enhanced learning features.
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="tutorial-step-lbl" style="font-size: 0.8rem; font-weight: 800; color: var(--accent-color);">Step 1 of 3</span>
+                <div>
+                    <button id="tutorial-skip" class="btn-secondary" style="padding: 6px 14px; font-size: 0.85rem; margin-right: 8px;">Skip</button>
+                    <button id="tutorial-next" class="btn-primary" style="padding: 6px 16px; font-size: 0.85rem;">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="js/utils.js"></script>
     <script src="js/api.js"></script>

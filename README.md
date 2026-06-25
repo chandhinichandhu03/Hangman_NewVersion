@@ -20,18 +20,15 @@
 
 ## 🏃 Getting Started
 
-1.  **Install Dependencies**:
-    ```bash
-    npm install
-    ```
+### Single Command to Run (macOS & Windows)
 
-2.  **Start the Server**:
-    ```bash
-    npm start
-    ```
+Run this single command in your terminal (macOS/Linux) or Command Prompt/PowerShell (Windows) to install all dependencies and start the local server:
 
-3.  **Access the Game**:
-    Open [http://localhost:5000](http://localhost:5000) in your browser.
+```bash
+npm install && npm start
+```
+
+Once started, open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 🎮 How to Play
 
@@ -43,4 +40,4 @@
 6.  Win to earn bonus points and climb the leaderboard.
 
 ---
-Built with ❤️ by Antigravity
+
